@@ -1,10 +1,10 @@
 # Alpine linux
 FROM alpine:latest
 
-ARG MYSQL_USER
-ARG MYSQL_PASSWORD
-ARG MYSQL_PORT
-ARG MYSQL_HOST
+ARG MYSQL_USER=root
+ARG MYSQL_PASSWORD=phabricator
+ARG MYSQL_PORT=3306
+ARG MYSQL_HOST=phabricator-mariadb
 
 # Maintainer
 MAINTAINER VeeeneX <veeenex@gmail.com>
