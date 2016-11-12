@@ -14,6 +14,7 @@ RUN apk --update add \
     git \
     curl \
     nodejs \
+    mysql-client \
     sudo \
     bash \
     openssh \
