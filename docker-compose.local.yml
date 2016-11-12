@@ -12,7 +12,9 @@ networks:
 services:
   phabricator-mariadb:
     container_name: phabricator-mariadb
-    image: veeenex/phabricator-mariadb
+    build:
+      context: .
+      dockerfile: docker/phabricator-mariadb/Dockerfile
     environment:
       MYSQL_ROOT_PASSWORD: phabricator
       MYSQL_USER: phabricator
@@ -23,7 +25,14 @@ services:
 
   phabricator:
     container_name: phabricator
-    image: veeenex/phabricator
+    build:
+      context: .
+      dockerfile: docker/phabricator/Dockerfile
+      args:
+        MYSQL_HOST: phabricator-mariadb
+        MYSQL_PORT: 3306
+        MYSQL_USER: root
+        MYSQL_PASSWORD: phabricator
     volumes:
       - phabricator-storage:/var/storage
       - phabricator-repository:/var/repo
@@ -37,7 +46,9 @@ services:
 
   phabricator-webserver:
     container_name: phabricator-webserver
-    image: veeenex/phabricator-webserver
+    build:
+      context: .
+      dockerfile: docker/phabricator-webserver/Dockerfile
     volumes_from:
       - phabricator
     networks:
