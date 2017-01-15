@@ -2,9 +2,8 @@ version: '2'
 
 volumes:
   phabricator-storage:
-      driver: local
   phabricator-repository:
-      driver: local
+  phabricator-mariadb:
 
 networks:
   phabricator:
@@ -12,9 +11,9 @@ networks:
 services:
   phabricator-mariadb:
     container_name: phabricator-mariadb
-    build:
-      context: .
-      dockerfile: docker/phabricator-mariadb/Dockerfile
+    build: docker/phabricator-mariadb
+    volumes:
+      - phabricator-mariadb:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: phabricator
       MYSQL_USER: phabricator
@@ -26,8 +25,7 @@ services:
   phabricator:
     container_name: phabricator
     build:
-      context: .
-      dockerfile: docker/phabricator/Dockerfile
+      context: docker/phabricator
       args:
         MYSQL_HOST: phabricator-mariadb
         MYSQL_PORT: 3306
@@ -46,9 +44,7 @@ services:
 
   phabricator-webserver:
     container_name: phabricator-webserver
-    build:
-      context: .
-      dockerfile: docker/phabricator-webserver/Dockerfile
+    build: docker/phabricator-webserver
     volumes_from:
       - phabricator
     networks:

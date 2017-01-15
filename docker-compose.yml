@@ -2,9 +2,8 @@ version: '2'
 
 volumes:
   phabricator-storage:
-      driver: local
   phabricator-repository:
-      driver: local
+  phabricator-mariadb:
 
 networks:
   phabricator:
@@ -13,6 +12,8 @@ services:
   phabricator-mariadb:
     container_name: phabricator-mariadb
     image: veeenex/phabricator-mariadb
+    volumes:
+      - phabricator-mariadb:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: phabricator
       MYSQL_USER: phabricator

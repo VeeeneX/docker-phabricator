@@ -6,9 +6,6 @@ ARG MYSQL_PASSWORD=phabricator
 ARG MYSQL_PORT=3306
 ARG MYSQL_HOST=phabricator-mariadb
 
-# Maintainer
-MAINTAINER VeeeneX <veeenex@gmail.com>
-
 # Install packages
 RUN apk --update add \
     git \
@@ -46,13 +43,15 @@ RUN apk --update add \
     php5-xml \
     php5-zip
 
+
 # Make /var/www a work dir
-WORKDIR "/var/www"
+WORKDIR /var/www
 
 # Clone phabricator
 RUN git clone https://github.com/phacility/libphutil.git \
     && git clone https://github.com/phacility/arcanist.git \
-    && git clone https://github.com/phacility/phabricator.git
+    && git clone https://github.com/phacility/phabricator.git \
+    && git clone https://github.com/PHPOffice/PHPExcel.git
 
 RUN adduser -D -g "" -s /bin/sh vcs-user \
     && sed -i 's/vcs-user:!/vcs-user:NP/' /etc/shadow \
@@ -92,16 +91,14 @@ RUN ./phabricator/bin/config set mysql.host $MYSQL_HOST \
 RUN cd /var/www/phabricator/support/aphlict/server/ && npm install ws
 
 # Copy configuration
-COPY docker/phabricator/php-fpm.conf /etc/php5/php-fpm.conf
-COPY docker/phabricator/php.ini /etc/php5/conf.d/99-overwrites.ini
-COPY docker/phabricator/sudoers /etc/sudoers
-COPY docker/phabricator/phabricator-ssh-hook.sh /usr/lib/phabricator-ssh-hook.sh
-COPY docker/phabricator/sshd_config.phabricator /etc/ssh/sshd_config.phabricator
-COPY docker/phabricator/start.sh /var/www/start.sh
+COPY ./php-fpm.conf /etc/php5/php-fpm.conf
+COPY ./php.ini /etc/php5/conf.d/99-overwrites.ini
+COPY ./sudoers /etc/sudoers
+COPY ./phabricator-ssh-hook.sh /usr/lib/phabricator-ssh-hook.sh
+COPY ./sshd_config.phabricator /etc/ssh/sshd_config.phabricator
 
 RUN chown root /usr/lib/phabricator-ssh-hook.sh \
-  && chmod 755 /usr/lib/phabricator-ssh-hook.sh \
-  && chmod +x /var/www/start.sh
+  && chmod 755 /usr/lib/phabricator-ssh-hook.sh
 
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa \
   && ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa \
@@ -114,5 +111,8 @@ EXPOSE 2222
 # Expose php-fpm port
 EXPOSE 9000
 
-# Start
-CMD ["/bin/bash", "./start.sh"]
+COPY ./docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["start"]
