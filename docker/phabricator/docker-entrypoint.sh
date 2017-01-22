@@ -6,8 +6,10 @@ do
 done;
 
 /var/www/phabricator/bin/phd start
+/var/www/phabricator/bin/aphlict start
+
+# Start SSH
 /usr/sbin/sshd -f /etc/ssh/sshd_config.phabricator
-su - daemon-user -c "/var/www/phabricator/bin/aphlict start"
 
 if [ "${1}" = "start" ]; then
   exec bash -c "/usr/sbin/php-fpm -F -O 2>&1"

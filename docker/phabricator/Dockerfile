@@ -88,8 +88,6 @@ RUN ./phabricator/bin/config set mysql.host $MYSQL_HOST \
   && ./phabricator/bin/config set phpmailer.mailer smtp \
 	&& ./phabricator/bin/config set storage.local-disk.path /var/storage
 
-RUN cd /var/www/phabricator/support/aphlict/server/ && npm install ws
-
 # Copy configuration
 COPY ./php-fpm.conf /etc/php5/php-fpm.conf
 COPY ./php.ini /etc/php5/conf.d/99-overwrites.ini
