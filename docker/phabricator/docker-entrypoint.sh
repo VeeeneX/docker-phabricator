@@ -12,7 +12,7 @@ done;
 /usr/sbin/sshd -f /etc/ssh/sshd_config.phabricator
 
 if [ "${1}" = "start" ]; then
-  exec bash -c "/usr/sbin/php-fpm -F -O 2>&1"
+  exec bash -c "/usr/bin/php-fpm -F -O 2>&1"
 else
   exec $@
 fi

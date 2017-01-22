@@ -35,6 +35,8 @@ services:
       - phabricator-mariadb
     networks:
       - phabricator
+    environment:
+      MYSQL_HOST: "phabricator-mariadb"
 
   phabricator-webserver:
     container_name: phabricator-webserver
