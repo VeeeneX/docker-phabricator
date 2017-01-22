@@ -48,10 +48,10 @@ RUN apk --update add \
 WORKDIR /var/www
 
 # Clone phabricator
-RUN git clone https://github.com/phacility/libphutil.git \
-    && git clone https://github.com/phacility/arcanist.git \
-    && git clone https://github.com/phacility/phabricator.git \
-    && git clone https://github.com/PHPOffice/PHPExcel.git
+RUN git clone https://github.com/phacility/libphutil.git /var/www/libphutil \
+    && git clone https://github.com/phacility/arcanist.git /var/www/arcanist \
+    && git clone https://github.com/phacility/phabricator.git /var/www/phabricator \
+    && git clone https://github.com/PHPOffice/PHPExcel.git /var/www/PHPExcel
 
 RUN adduser -D -g "" -s /bin/sh vcs-user \
     && sed -i 's/vcs-user:!/vcs-user:NP/' /etc/shadow \
