@@ -18,7 +18,6 @@ services:
       MYSQL_ROOT_PASSWORD: phabricator
       MYSQL_USER: phabricator
       MYSQL_PASSWORD: phabricator
-      MYSQL_DATABASE: phabricator
     networks:
       - phabricator
 
